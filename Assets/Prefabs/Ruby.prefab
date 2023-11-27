@@ -101,6 +101,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   maxHealth: 5
+  timeInvincible: 2
+  hitParticle: {fileID: 0}
+  respawnPosition: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  throwSound: {fileID: 0}
+  hitSound: {fileID: 0}
 --- !u!50 &2957027209890344242
 Rigidbody2D:
   serializedVersion: 4

@@ -5,6 +5,7 @@ using UnityEngine;
 public class HealthCollectable : MonoBehaviour
 {
     public AudioClip collectedClip;
+    public ParticleSystem FixedEffect;
 
     // Start is called before the first frame update
     void OnTriggerEnter2D(Collider2D other)
@@ -17,8 +18,8 @@ public class HealthCollectable : MonoBehaviour
             {
                 controller.ChangeHealth(1);
                 Destroy(gameObject);
-
                 controller.PlaySound(collectedClip);
+                Instantiate(FixedEffect, transform.position + Vector3.up * 0.5f, Quaternion.identity);
             }
         }
     }

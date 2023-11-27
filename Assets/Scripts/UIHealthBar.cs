@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIHealthBar : MonoBehaviour
 {
     public static UIHealthBar instance { get; private set; }
+    
 
     public Image mask;
     float originalSize;
@@ -20,6 +21,8 @@ public class UIHealthBar : MonoBehaviour
     {
         originalSize = mask.rectTransform.rect.width;
     }
+
+
 
     public void SetValue(float value)
     {
