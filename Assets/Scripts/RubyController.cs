@@ -9,6 +9,10 @@ public class RubyController : MonoBehaviour
 {
     // Movement
     public float speed = 3.0f;
+    float SpeedTimer;
+    public float TimeBoosted = 3.0f;
+    bool SpeedBoost;
+    public float maxSpeed = 5.0f;
 
     // Health
     public int maxHealth = 5;
@@ -24,6 +28,8 @@ public class RubyController : MonoBehaviour
     // Audio
     public AudioClip throwSound;
     public AudioClip hitSound;
+    public AudioClip DiaologSound;
+    public AudioClip VictorySound;
 
     // Invincibility
     bool isInvincible;
@@ -37,6 +43,9 @@ public class RubyController : MonoBehaviour
     // Scoreing
     public TextMeshProUGUI scoreText;
     public int score;
+    public int CoinsCollected;
+    public TextMeshProUGUI CoinTotal;
+    public int CoinMax = 7;
 
     // GameOver and Win Screen
     public GameObject gameOverText;
@@ -54,6 +63,7 @@ public class RubyController : MonoBehaviour
     {
         // Movement
         rigidbody2d = GetComponent<Rigidbody2D>();
+        SpeedTimer = -1.0f;
         
         // Animation
         animator = GetComponent<Animator>();
@@ -91,8 +101,21 @@ public class RubyController : MonoBehaviour
         if (isInvincible)
         {
             invincibleTimer -= Time.deltaTime;
+            //Debug.Log(invincibleTimer);
             if (invincibleTimer < 0)
                 isInvincible = false;
+        }
+
+        // Speedboost timer
+        if (SpeedBoost)
+        {
+            SpeedTimer -= Time.deltaTime;
+            //Debug.Log(SpeedTimer);
+            if (SpeedTimer < 0)
+            {
+                SpeedBoost = false;
+                speed = 3;
+            }
         }
 
         // Projectile
@@ -111,14 +134,15 @@ public class RubyController : MonoBehaviour
                 if (character != null)
                 {
                     character.DisplayDialog();
+                    audioSource.PlayOneShot(DiaologSound);
                 }
             }
         }
 
-        if (score == 3)
+        // Game over
+        if (score == 4 & CoinsCollected == 7)
         {
-            YouWinText.SetActive(true);
-            
+            YouWinText.SetActive(true);            
            // gameOverText.text = "You Won! Press R to Restart!";
         }
 
@@ -154,6 +178,20 @@ public class RubyController : MonoBehaviour
         rigidbody2d.MovePosition(position);
     }
 
+    public void ChangeSpeed(float amount) 
+    {
+        if (amount > 0)
+        {
+            if (SpeedBoost)
+                return;
+
+            SpeedBoost = true;          
+            SpeedTimer = TimeBoosted;
+        }
+        speed = Mathf.Clamp(speed + amount, 0, maxSpeed);
+
+    }
+
     public void ChangeHealth(int amount)
     {
         if (amount < 0)
@@ -184,7 +222,11 @@ public class RubyController : MonoBehaviour
         
     }
 
-
+    public void ChangeCoins(int amount)
+    {
+        CoinsCollected += 1;
+        CoinTotal.text = "Coins: " + CoinsCollected.ToString();
+    }
 
 
 
